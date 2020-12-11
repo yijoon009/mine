@@ -1,5 +1,5 @@
 package studentScore_JOption;
-import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +17,7 @@ public class Field {
 	Matcher m;
 	
 	//제일 첫화면 (회원가입, 로그인)
-	public void startView() {
+	public void startView() throws AuthenticException {
 		
 		int choice = 0;
 		String[] menu = {"회원가입", "로그인"};
@@ -37,12 +37,18 @@ public class Field {
 	}
 	
 	//회원가입
-	public void setUser() {
+	public void setUser() throws AuthenticException{
 		boolean id = true, pw = true, data = true, schoolCh = true, gradeCh = true, classCh = true;
 		
 		//회원가입id
 		do {
-			String input = JOptionPane.showInputDialog("아이디를 입력해주세요. (영문으로 시작, 12자 이내 (숫자 포함 가능))");
+			String input = null;
+			try {
+				input = JOptionPane.showInputDialog("아이디를 입력해주세요. (영문으로 시작, 12자 이내 (숫자 포함 가능))");
+			} catch (HeadlessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(input.length()==0) {
 				JOptionPane.showMessageDialog(null, "아이디를 입력해주시길 바랍니다.");
 				continue;
@@ -50,27 +56,27 @@ public class Field {
 				JOptionPane.showMessageDialog(null, "12자 이내로 입력해주시길 바랍니다.");
 				continue;
 			}
-			if(input.matches("^[a-zA-Z]{1}[a-zA-Z0-9]+$")) {
-				//첫 회원가입일 경우, 중복검사 필요 없음
-				if(acList.size()==0) {
-					ac = new Account();
-					ac.setId(input);
-					id = false;
-				}else {
-					//id중복검사
-					for(Account alid : acList) {
-						if(input.equals(alid.getId())){
-							JOptionPane.showMessageDialog(null, "이미 존재하는 ID입니다.");
-						}else {
-							ac = new Account();
-							ac.setId(input);
-							id = false;
-						}
-					}
-				}
-			}else {
-				JOptionPane.showMessageDialog(null, "아이디는 영문 (숫자 포함 가능)으로만 입력해야 합니다.");
-			}
+//			if(input.matches("^[a-zA-Z]{1}[a-zA-Z0-9]+$")) {
+//				//첫 회원가입일 경우, 중복검사 필요 없음
+//				if(acList.size()==0) {
+//					ac = new Account();
+//					ac.setId(input);
+//					id = false;
+//				}else {
+//					//id중복검사
+//					for(Account alid : acList) {
+//						if(input.equals(alid.getId())){
+//							JOptionPane.showMessageDialog(null, "이미 존재하는 ID입니다.");
+//						}else {
+//							ac = new Account();
+//							ac.setId(input);
+//							id = false;
+//						}
+//					}
+//				}
+//			}else {
+//				JOptionPane.showMessageDialog(null, "아이디는 영문 (숫자 포함 가능)으로만 입력해야 합니다.");
+//			}
 		}while(id);
 		
 		//회원가입pw
@@ -132,7 +138,7 @@ public class Field {
 	}//end setUser
 	
 	//로그인
-	public void login() {
+	public void login() throws AuthenticException {
 		boolean idCh = true, pwCh = false;
 		Account user = null;
 		//user 전역변수로 넣어봐?
@@ -151,7 +157,6 @@ public class Field {
 			}
 			if(user==null) {
 				JOptionPane.showMessageDialog(null, "존재하지 않거나, 틀린 ID입니다.");
-				return;
 			}
 		}
 		while(pwCh) {
@@ -166,7 +171,7 @@ public class Field {
 	}//end login
 		
 	//로그인 성공시 메뉴 보여주기
-	public void menuView(Account user) {
+	public void menuView(Account user) throws AuthenticException {
 		
 		stuList = new ArrayList<>();
 		dataBase.put(ac, stuList);
