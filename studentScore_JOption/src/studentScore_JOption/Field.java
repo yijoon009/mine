@@ -221,7 +221,7 @@ public class Field {
 				}
 			}while(nameCh);
 			
-			String pattern = "^[0-9]*$";
+			String pattern = "^[0-9]{1,3}$";
 			//중간고사 입력
 			do {
 				String s1 = JOptionPane.showInputDialog(introMsg + "\n\n중간고사 성적을 입력하세요.");
@@ -339,7 +339,6 @@ public class Field {
 		if(dataBase.get(user).size()==0) {
 			JOptionPane.showMessageDialog(null, introMsg+"출력할 데이터가 없습니다.");
 		}else {
-			//등수구하기 (두명까지만 완벽)
 			for(int i=0; i < dataBase.get(user).size();i++) {
 				int rank=1;
 				for(int j=0; j < dataBase.get(user).size();j++) {
@@ -350,20 +349,7 @@ public class Field {
 				dataBase.get(user).get(i).setRank(rank);
 			}
 			
-			
-			
-			
-			
-			Set<Map.Entry<Account, ArrayList<Student>>> entryS = dataBase.entrySet();
-			Iterator<Map.Entry<Account, ArrayList<Student>>> iter = entryS.iterator();
-			while(iter.hasNext()) {
-				Map.Entry<Account, ArrayList<Student>> itt = iter.next();
-				ArrayList<Student> value = itt.getValue();
-				result+=value+"\n";
-			}
-			
-			JOptionPane.showMessageDialog(null, introMsg + result);
-//			JOptionPane.showMessageDialog(null, introMsg+dataBase.get(user));
+			JOptionPane.showMessageDialog(null, introMsg+dataBase.get(user));
 		}
 		
 	}
